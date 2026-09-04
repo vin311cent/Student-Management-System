@@ -1,10 +1,35 @@
+
 <?php
 session_start();
-if (!isset($_SESSION['user'])) { header('Location: Login.php'); exit; }
+
+if (!isset($_SESSION['user'])) {
+    header('Location: Login.php');
+    exit;
+}
 
 require_once __DIR__ . '/src/Database.php';
+
 $database = Database::getInstance();
 $db = $database->getConnection();
+
+/*
+|--------------------------------------------------------------------------
+| Academic Summary + GPA
+|--------------------------------------------------------------------------
+|
+| GPA is calculated using:
+|
+| GPA = Sum(Grade Point × Credit Hours) / Sum(Credit Hours)
+|
+| Grade points:
+| A = 4.0
+| B = 3.0
+| C = 2.0
+| D = 1.0
+| F = 0.0
+|
+|--------------------------------------------------------------------------
+*/
 
 $summaries = $db->query("
   SELECT 
@@ -17,16 +42,59 @@ $summaries = $db->query("
   LEFT JOIN enrollments e ON s.id = e.student_id
   GROUP BY s.id
 ")->fetchAll(PDO::FETCH_ASSOC);
+
+
+/*
+|--------------------------------------------------------------------------
+| Calculate GPA for each student
+|--------------------------------------------------------------------------
+*/
+
+foreach ($summaries as &$sum) {
+
+    $creditHours = (float)($sum['total_credit_hours'] ?? 0);
+    $qualityPoints = (float)($sum['total_quality_points'] ?? 0);
+
+    if ($creditHours > 0) {
+        $sum['gpa'] = round(
+            $qualityPoints / $creditHours,
+            2
+        );
+    } else {
+        $sum['gpa'] = null;
+    }
+}
+
+unset($sum);
+
 ?>
 <!DOCTYPE html>
+
 <html lang="en">
 
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Academic Summary | Student Management System</title>
     <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .gpa {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .no-gpa {
+            color: #777;
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
@@ -159,4 +227,6 @@ $summaries = $db->query("
     </div>
 
 </body>
+
 </html>
+

@@ -1,38 +1,112 @@
 <?php
+
 session_start();
-if (!isset($_SESSION['user'])) { header('Location: Login.php'); exit; }
+
+if (!isset($_SESSION['user'])) {
+    header('Location: Login.php');
+    exit;
+}
 
 require_once __DIR__ . '/src/Database.php';
+require_once __DIR__ . '/src/Grades.php';
+
 $database = Database::getInstance();
 $db = $database->getConnection();
 
+$message = '';
+$error = '';
+
+/*
+|--------------------------------------------------------------------------
+| Save Marks
+|--------------------------------------------------------------------------
+*/
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_grade'])) {
-    $enrollment_id = $_POST['enrollment_id'];
-    $grade = $_POST['grade'];
-    $stmt = $db->prepare("UPDATE enrollments SET grade = ? WHERE id = ?");
-    $stmt->execute([$grade, $enrollment_id]);
+
+    $enrollment_id = $_POST['enrollment_id'] ?? '';
+    $marks = $_POST['marks'] ?? '';
+
+    try {
+
+        // Validate enrollment ID
+        if (!filter_var($enrollment_id, FILTER_VALIDATE_INT)) {
+            throw new InvalidArgumentException(
+                "Invalid enrolment ID."
+            );
+        }
+
+        // Convert marks to grade
+        $grade = Grade::convert($marks);
+
+        // Convert marks to numeric value
+        $marks = (float)$marks;
+
+        // Update both marks and grade
+        $stmt = $db->prepare("
+            UPDATE enrollments
+            SET marks = ?, grade = ?
+            WHERE id = ?
+        ");
+
+        $stmt->execute([
+            $marks,
+            $grade,
+            $enrollment_id
+        ]);
+
+        $message = "Marks saved successfully. Grade assigned: " . $grade;
+
+    } catch (InvalidArgumentException $e) {
+
+        $error = $e->getMessage();
+
+    } catch (PDOException $e) {
+
+        $error = "A database error occurred. Please try again.";
+
+    } catch (Exception $e) {
+
+        $error = "An unexpected error occurred.";
+    }
 }
+
+
+/*
+|--------------------------------------------------------------------------
+| Retrieve Enrolments
+|--------------------------------------------------------------------------
+*/
 
 $enrollments = $db->query("
     SELECT 
-        e.id, 
-        CONCAT(s.first_name, ' ', s.last_name) AS student_name, 
-        c.course_name, 
-        e.grade 
+        e.id,
+        e.marks,
+        e.grade,
+        CONCAT(s.first_name, ' ', s.last_name) AS student_name,
+        c.course_name,
+        c.credit_hours
     FROM enrollments e
     JOIN students s ON e.student_id = s.id
     JOIN courses c ON e.course_id = c.id
+    ORDER BY student_name, c.course_name
 ")->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grades | Student Management System</title>
+
     <link rel="stylesheet" href="style.css">
+
 </head>
+
 
 <body>
 
@@ -191,4 +265,5 @@ $enrollments = $db->query("
     </div>
 
 </body>
+
 </html>

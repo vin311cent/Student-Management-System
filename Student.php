@@ -46,7 +46,7 @@ $students = $db->query("
             <nav class="nav-links" aria-label="Sidebar navigation">
                 <a class="nav-item" href="dashboard.php">Dashboard</a>
                 <a class="nav-item active" href="Student.php">Students</a>
-                <a class="nav-item" href="Course.php">Courses</a>
+                <a class="nav-item" href="Courses.php">Courses</a>
                 <a class="nav-item" href="Enrolment.php">Enrolment</a>
                 <a class="nav-item" href="Grades.php">Grades</a>
                 <a class="nav-item" href="AcademicSummary.php">Academic Summary</a>
