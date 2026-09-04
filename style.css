@@ -394,3 +394,382 @@ tbody tr:hover {
 tbody tr:last-child td {
     border-bottom: none;
 }
+
+/* =========================
+   COURSE PAGE
+   ========================= */
+
+.course-form {
+    display: grid;
+    grid-template-columns: minmax(180px, 1fr) minmax(250px, 1.5fr) auto;
+    column-gap: 25px;
+    row-gap: 18px;
+    align-items: end;
+}
+
+.course-form-card {
+    margin-top: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1f2d3d;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 11px 13px;
+    border: 1px solid #d8e0e8;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    box-sizing: border-box;
+    background: #ffffff;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #2f6fed;
+    box-shadow: 0 0 0 3px rgba(47, 111, 237, 0.1);
+}
+
+.form-group input::placeholder {
+    color: #9aa7b5;
+}
+
+.form-action {
+    display: flex;
+    align-items: flex-end;
+}
+
+.form-action .btn {
+    white-space: nowrap;
+    border: none;
+    cursor: pointer;
+}
+
+.panel-heading p {
+    margin-top: 4px;
+    font-size: 13px;
+    color: #718096;
+}
+
+.panel-card table {
+    width: 100%;
+}
+
+.panel-card tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.panel-card tbody tr:hover {
+    background-color: #f5f8fc;
+}
+
+@media (max-width: 800px) {
+    .course-form {
+        grid-template-columns: 1fr;
+    }
+
+    .form-action {
+        align-items: stretch;
+    }
+
+    .form-action .btn {
+        width: 100%;
+    }
+}
+
+/* =========================
+   ENROLMENT PAGE
+   ========================= */
+
+.enrolment-form-card {
+    margin-top: 20px;
+}
+
+.enrolment-form {
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) minmax(220px, 1fr) auto;
+    column-gap: 25px;
+    row-gap: 18px;
+    align-items: end;
+}
+
+.enrolment-form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.enrolment-form .form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1f2d3d;
+}
+
+.enrolment-form select {
+    width: 100%;
+    padding: 11px 13px;
+    border: 1px solid #d8e0e8;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    box-sizing: border-box;
+    background: #ffffff;
+    color: #1f2d3d;
+    cursor: pointer;
+}
+
+.enrolment-form select:focus {
+    outline: none;
+    border-color: #2f6fed;
+    box-shadow: 0 0 0 3px rgba(47, 111, 237, 0.1);
+}
+
+.enrolment-form .form-action {
+    display: flex;
+    align-items: flex-end;
+}
+
+.enrolment-form .form-action .btn {
+    white-space: nowrap;
+    border: none;
+    cursor: pointer;
+}
+
+.enrolment-form + * {
+    margin-top: 20px;
+}
+
+
+/* Enrolment table */
+
+.panel-card tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.panel-card tbody tr:hover {
+    background-color: #f5f8fc;
+}
+
+
+/* Responsive enrolment form */
+
+@media (max-width: 800px) {
+
+    .enrolment-form {
+        grid-template-columns: 1fr;
+    }
+
+    .enrolment-form .form-action {
+        align-items: stretch;
+    }
+
+    .enrolment-form .form-action .btn {
+        width: 100%;
+    }
+
+}
+
+/* =========================
+   GRADES PAGE
+   ========================= */
+
+.grades-table {
+    width: 100%;
+}
+
+.grades-table th {
+    white-space: nowrap;
+}
+
+.grades-table td {
+    vertical-align: middle;
+}
+
+
+/* Grade status */
+
+.grade-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    background: #e8f0ff;
+    color: #2458b8;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.grade-pending {
+    color: #8a97a6;
+    font-size: 13px;
+    font-style: italic;
+}
+
+
+/* Grade assignment form */
+
+.grade-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.grade-form input {
+    width: 70px;
+    padding: 9px 10px;
+    border: 1px solid #d8e0e8;
+    border-radius: 7px;
+    font-size: 14px;
+    font-family: inherit;
+    box-sizing: border-box;
+    text-align: center;
+    background: #ffffff;
+}
+
+.grade-form input:focus {
+    outline: none;
+    border-color: #2f6fed;
+    box-shadow: 0 0 0 3px rgba(47, 111, 237, 0.1);
+}
+
+.grade-form input::placeholder {
+    color: #9aa7b5;
+}
+
+.grade-form .btn {
+    padding: 9px 14px;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+
+/* Table row hover */
+
+.grades-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.grades-table tbody tr:hover {
+    background-color: #f5f8fc;
+}
+
+
+/* Responsive grade form */
+
+@media (max-width: 700px) {
+
+    .grades-table {
+        min-width: 650px;
+    }
+
+    .table-wrap {
+        overflow-x: auto;
+    }
+
+    .grade-form {
+        gap: 7px;
+    }
+
+}
+
+/* =========================
+   ACADEMIC SUMMARY PAGE
+   ========================= */
+
+.summary-table {
+    width: 100%;
+}
+
+.summary-table th {
+    white-space: nowrap;
+}
+
+.summary-table td {
+    vertical-align: middle;
+}
+
+.summary-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.summary-table tbody tr:hover {
+    background-color: #f5f8fc;
+}
+
+.summary-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    background: #e8f0ff;
+    color: #2458b8;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+@media (max-width: 700px) {
+
+    .summary-table {
+        min-width: 650px;
+    }
+
+    .table-wrap {
+        overflow-x: auto;
+    }
+
+}
+
+/* =========================
+   SETTINGS PAGE
+   ========================= */
+
+.settings-card {
+    margin-top: 20px;
+}
+
+.setting-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 0;
+}
+
+.setting-label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 13px;
+    color: #718096;
+}
+
+.setting-value {
+    display: block;
+    font-size: 16px;
+    color: #1f2d3d;
+}
+
+.settings-action {
+    display: flex;
+    align-items: center;
+}
+
+.settings-action .btn {
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+}

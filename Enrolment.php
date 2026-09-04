@@ -31,13 +31,17 @@ $enrollments = $db->query("
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enrolment | Student Management System</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="admin-shell">
+
         <aside class="sidebar">
             <div class="brand">COLLEGE ADMIN</div>
+
             <nav class="nav-links">
                 <a class="nav-item" href="dashboard.php">Dashboard</a>
                 <a class="nav-item" href="Student.php">Students</a>
@@ -50,38 +54,146 @@ $enrollments = $db->query("
             </nav>
         </aside>
 
-        <main class="main-panel">
-            <h2>Course Enrolment</h2>
-            <form method="POST">
-                <select name="student_id" required>
-                    <option value="">Select Student</option>
-                    <?php foreach ($students as $s): ?>
-                        <option value="<?= $s['id'] ?>"><?= htmlspecialchars($s['name']) ?></option>
-                    <?php endforeach; ?>
-                </select>
-                <select name="course_id" required>
-                    <option value="">Select Course</option>
-                    <?php foreach ($courses as $c): ?>
-                        <option value="<?= $c['id'] ?>"><?= htmlspecialchars($c['course_name']) ?></option>
-                    <?php endforeach; ?>
-                </select>
-                <button type="submit" name="enroll">Enroll Student</button>
-            </form>
 
-            <table style="margin-top:20px;">
-                <thead>
-                    <tr><th>STUDENT</th><th>ENROLLED COURSE</th></tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($enrollments as $e): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($e['student_name']) ?></td>
-                        <td><?= htmlspecialchars($e['course_name']) ?></td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+        <main class="main-panel">
+
+            <!-- Topbar -->
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">Administrator access</p>
+                    <h1>Enrolment</h1>
+                </div>
+
+                <div class="topbar-actions">
+                    <span class="topbar-pill">Admin ▼</span>
+                    <a class="logout-link" href="Login.php?logout=1">Logout</a>
+                </div>
+            </header>
+
+
+            <section class="dashboard-content">
+
+                <!-- Enrolment Introduction -->
+                <section class="welcome-card">
+                    <div>
+                        <p class="eyebrow">Student management</p>
+                        <h2>Enrol a student</h2>
+                        <p>
+                            Select a student and course to create a new enrolment.
+                        </p>
+                    </div>
+                </section>
+
+
+                <!-- Enrolment Form -->
+                <section class="panel-card enrolment-form-card">
+
+                    <div class="panel-heading">
+                        <div>
+                            <h3>Enrolment Information</h3>
+                            <p>Choose the student and course below.</p>
+                        </div>
+                    </div>
+
+                    <form method="POST" class="enrolment-form">
+
+                        <div class="form-group">
+                            <label for="student_id">Student</label>
+
+                            <select name="student_id" id="student_id" required>
+                                <option value="">Select Student</option>
+
+                                <?php foreach ($students as $s): ?>
+                                    <option value="<?= $s['id'] ?>">
+                                        <?= htmlspecialchars($s['name']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+
+                            </select>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="course_id">Course</label>
+
+                            <select name="course_id" id="course_id" required>
+                                <option value="">Select Course</option>
+
+                                <?php foreach ($courses as $c): ?>
+                                    <option value="<?= $c['id'] ?>">
+                                        <?= htmlspecialchars($c['course_name']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+
+                            </select>
+                        </div>
+
+
+                        <div class="form-action">
+                            <button
+                                type="submit"
+                                name="enroll"
+                                class="btn btn-primary"
+                            >
+                                Enroll Student
+                            </button>
+                        </div>
+
+                    </form>
+
+                </section>
+
+
+                <!-- Current Enrolments -->
+                <section class="panel-card">
+
+                    <div class="panel-heading">
+                        <div>
+                            <h3>Current Enrolments</h3>
+                            <p>Students currently enrolled in courses.</p>
+                        </div>
+                    </div>
+
+
+                    <div class="table-wrap">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>STUDENT</th>
+                                    <th>ENROLLED COURSE</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                <?php foreach ($enrollments as $e): ?>
+
+                                <tr>
+                                    <td>
+                                        <?= htmlspecialchars($e['student_name']) ?>
+                                    </td>
+
+                                    <td>
+                                        <?= htmlspecialchars($e['course_name']) ?>
+                                    </td>
+                                </tr>
+
+                                <?php endforeach; ?>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </section>
+
+            </section>
+
         </main>
+
     </div>
 </body>
 </html>
