@@ -62,36 +62,109 @@ $courses = $db->query("SELECT * FROM courses ORDER BY course_code")->fetchAll(PD
             </nav>
         </aside>
 
-        <main class="main-panel">
-            <h2>Course Management</h2>
-            
-            <!-- Add Course Form -->
-            <form method="POST" style="margin-bottom: 20px;">
+          <main class="main-panel">
+            <header class="topbar">
+                <div>
+                 <p class="eyebrow">Administrator access</p>
+                <h1>Courses</h1>
+               </div>
+
+                <div class="topbar-actions">
+                 <span class="topbar-pill">Admin ▼</span>
+                 <a class="logout-link" href="Login.php?logout=1">Logout</a>
+                </div>
+           </header>
+
+    <section class="dashboard-content">
+
+        <!-- Add Course Section -->
+        <section class="welcome-card">
+            <div>
+                <p class="eyebrow">Course management</p>
+                <h2>Add a new course</h2>
+                <p>Enter the course details below to add it to the system.</p>
+            </div>
+        </section>
+
+        <section class="panel-card course-form-card">
+
+            <div class="panel-heading">
+                <div>
+                    <h3>Course Information</h3>
+                    <p>Fill in the details for the new course.</p>
+                </div>
+            </div>
+
+            <form method="POST" class="course-form">
+
+                <div class="form-group">
+                    <label for="course_code">Course Code</label> <br>
+                    
                 <input type="text" name="course_code" placeholder="Course Code (e.g. CS101)" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="course_name">Course Name</label> <br>
+
                 <input type="text" name="course_name" placeholder="Course Name" required>
+
+                </div>
+
+                <div class="form-group">
+                    <label for="credits">Credit Hours</label> <br>
+
                 <input type="number" name="credits" placeholder="Credit Hours" min="1" required>
-                <button type="submit" name="add_course">Add Course</button>
+
+                </div>
+
+                <div class="form-action">
+                <button type="submit" name="add_course">+Add Course</button>
+                </div>
+
             </form>
 
-            <table>
-                <thead>
+        </section>
+
+
+        <!-- Course Records -->
+        <section class="panel-card">
+
+            <div class="panel-heading">
+                <div>
+                    <h3>Course Records</h3>
+                    <p>Courses currently registered in the system.</p>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
                     <tr>
                         <th>CODE</th>
                         <th>NAME</th>
                         <th>CREDIT HOURS</th>
                     </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($courses as $c): ?>
-                    <tr>
+                    </thead>
+
+                    <tbody>
+                        <?php foreach ($courses as $c): ?>
+                        <tr>
                         <td><?= htmlspecialchars($c['course_code'] ?? '') ?></td>
                         <td><?= htmlspecialchars($c['course_name'] ?? '') ?></td>
                         <td><?= htmlspecialchars($c['credit_hours'] ?? '') ?></td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </main>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+
+                </table>
+            </div>
+
+        </section>
+
+    </section>
+
+</main>
+       
     </div>
 </body>
 </html>
