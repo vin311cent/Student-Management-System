@@ -427,3 +427,182 @@ tbody tr:last-child td {
         width: 100%;
     }
 }
+
+/* =========================
+   COURSE PAGE
+   ========================= */
+
+.course-form {
+    display: grid;
+    grid-template-columns: minmax(180px, 1fr) minmax(250px, 1.5fr) auto;
+    column-gap: 25px;
+    row-gap: 18px;
+    align-items: end;
+}
+
+.course-form-card {
+    margin-top: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1f2d3d;
+}
+
+.form-group input {
+    width: 10px;
+    padding: 11px 13px;
+    border: 1px solid #d8e0e8;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    box-sizing: border-box;
+    background: #ffffff;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #2f6fed;
+    box-shadow: 0 0 0 3px rgba(47, 111, 237, 0.1);
+}
+
+.form-group input::placeholder {
+    color: #9aa7b5;
+}
+
+.form-action {
+    display: flex;
+    align-items: flex-end;
+}
+
+.form-action .btn {
+    white-space: nowrap;
+    border: none;
+    cursor: pointer;
+}
+
+.panel-heading p {
+    margin-top: 4px;
+    font-size: 13px;
+    color: #718096;
+}
+
+.panel-card table {
+    width: 100%;
+}
+
+.panel-card tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.panel-card tbody tr:hover {
+    background-color: #f5f8fc;
+}
+
+@media (max-width: 800px) {
+    .course-form {
+        grid-template-columns: 1fr;
+    }
+
+    .form-action {
+        align-items: stretch;
+    }
+
+    .form-action .btn {
+        width: 100%;
+    }
+}
+/* =========================
+   SETTINGS PAGE
+   ========================= */
+
+.settings-card {
+    margin-top: 20px;
+}
+
+.setting-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 0;
+}
+
+.setting-label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 13px;
+    color: #718096;
+}
+
+.setting-value {
+    display: block;
+    font-size: 16px;
+    color: #1f2d3d;
+}
+
+.settings-action {
+    display: flex;
+    align-items: center;
+}
+
+.settings-action .btn {
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+/*Report*/
+        .report-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .report-summary {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .report-summary .stat-card {
+            border-top: 4px solid #2563eb;
+        }
+
+        .report-table {
+            min-width: 850px;
+        }
+
+        .print-only {
+            display: none;
+        }
+
+        @media print {
+            .sidebar,
+            .topbar-actions,
+            .report-actions {
+                display: none;
+            }
+
+            .admin-shell,
+            .main-panel {
+                display: block;
+                padding: 0;
+            }
+
+            .panel-card,
+            .welcome-card,
+            .stat-card {
+                box-shadow: none;
+            }
+
+            .print-only {
+                display: block;
+            }
+        }
