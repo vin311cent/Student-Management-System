@@ -20,13 +20,13 @@ $db = $database->getConnection();
 // Fetch students with joined course and grade details
 $students = $db->query("
     SELECT 
-        s.id AS student_no,
+        s.student_number AS student_no,
         CONCAT(s.first_name, ' ', s.last_name) AS student_name,
-        c.course_name,
-        e.grade
+        COALESCE(GROUP_CONCAT(c.course_name SEPARATOR ', '), 'N/A') AS course_name
     FROM students s
     LEFT JOIN enrollments e ON s.id = e.student_id
     LEFT JOIN courses c ON e.course_id = c.id
+    GROUP BY s.id, s.student_number, s.first_name, s.last_name
     ORDER BY s.id DESC
 ")->fetchAll(PDO::FETCH_ASSOC);
 
@@ -88,7 +88,6 @@ $students = $db->query("
                                     <th>Student No</th>
                                     <th>Name</th>
                                     <th>Course</th>
-                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -98,7 +97,6 @@ $students = $db->query("
                                             <td><?php echo htmlspecialchars($student['student_no'] ?? ''); ?></td>
                                             <td><?php echo htmlspecialchars($student['student_name'] ?? ''); ?></td>
                                             <td><?php echo htmlspecialchars($student['course_name'] ?? 'N/A'); ?></td>
-                                            <td><?php echo htmlspecialchars($student['grade'] ?? 'Pending'); ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php else: ?>
