@@ -31,7 +31,7 @@ $totalEnrol    = $db->query("SELECT COUNT(*) FROM enrollments")->fetchColumn();
 // Fetch recent 5 students with course and grade details
 $students = $db->query("
     SELECT 
-        s.id AS student_no,
+        s.student_number AS student_no,
         CONCAT(s.first_name, ' ', s.last_name) AS student_name,
         c.course_name,
         e.grade

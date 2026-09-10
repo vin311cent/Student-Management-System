@@ -20,7 +20,7 @@ $db = $database->getConnection();
 // Fetch students with joined course and grade details
 $students = $db->query("
     SELECT 
-        s.id AS student_no,
+        s.student_number AS student_no,
         CONCAT(s.first_name, ' ', s.last_name) AS student_name,
         c.course_name,
         e.grade
