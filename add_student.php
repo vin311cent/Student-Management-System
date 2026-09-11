@@ -79,6 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .cancel-lnk { display: block; text-align: center; margin-top: 15px; color: #666; text-decoration: none; }
         .alert { padding: 10px; margin-bottom: 15px; border-radius: 4px; font-weight: bold; }
         .error { background-color: #ffeeef; color: #dc2626; border: 1px solid #fca5a5; }
+        select { width: 100%; padding: 10px; margin: 8px 0 16px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
     </style>
 </head>
 <body>
@@ -100,7 +101,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="text" name="last_name" placeholder="Enter last name" required>
 
             <label>Programme / Degree Department</label>
-            <input type="text" name="programme" placeholder="e.g., Computer Science" required>
+            
+            <select name="programme" id="programme" required>
+                <option value="">Select Programme</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Law">Law</option>
+                <option value="Social Work">Social Work</option>
+                <option value="Business ">Business </option>
+            </select>
 
             <label>Year of Study (1-6)</label>
             <input type="number" name="year_of_study" value="1" min="1" max="6" required>
