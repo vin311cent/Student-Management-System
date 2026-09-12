@@ -53,11 +53,7 @@ label {
 
 input {
     padding: 12px 14px;
-<<<<<<< HEAD
     border: 1px solid #464647;
-=======
-    border: 1px solid #d3dce9;
->>>>>>> 8bb8be0f6af6784b9a17839a449f0ab1a90ef57b
     border-radius: 10px;
     font-size: 1rem;
 }

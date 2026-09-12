@@ -56,11 +56,7 @@ $enrollments = $db->query("
 
             <nav class="nav-links">
                 <a class="nav-item" href="dashboard.php">Dashboard</a>
-<<<<<<< HEAD
                 <a class="nav-item" href="Students.php">Students</a>
-=======
-                <a class="nav-item" href="Student.php">Students</a>
->>>>>>> 8bb8be0f6af6784b9a17839a449f0ab1a90ef57b
                 <a class="nav-item" href="Courses.php">Courses</a>
                 <a class="nav-item active" href="Enrolments.php">Enrolment</a>
                 <a class="nav-item" href="Grades.php">Grades</a>
