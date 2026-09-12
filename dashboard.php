@@ -104,7 +104,7 @@ $students = $db->query("
                 <section class="panel-card">
                     <div class="panel-heading">
                         <h3>Recent Students</h3>
-                        <a href="Student.php">View all</a>
+                        <a href="Students.php">View all</a>
                     </div>
                     <div class="table-wrap">
                         <table>
