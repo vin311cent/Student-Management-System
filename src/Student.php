@@ -57,7 +57,11 @@ class Student
                 );
             }
         }
+<<<<<<< HEAD
         $this->enrolments[] = new Enrolment($course);
+=======
+        $this->enrolments[] = new Enrolment($this, $course);
+>>>>>>> 8bb8be0f6af6784b9a17839a449f0ab1a90ef57b
     }
 
     /**

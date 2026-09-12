@@ -28,7 +28,10 @@ $students = $db->query("
     SELECT 
         s.student_number,
         CONCAT(s.first_name, ' ', s.last_name) AS student_name,
+<<<<<<< HEAD
         s.programme,
+=======
+>>>>>>> 8bb8be0f6af6784b9a17839a449f0ab1a90ef57b
         COALESCE(GROUP_CONCAT(c.course_name SEPARATOR ', '), 'N/A') AS course_names
     FROM students s
     LEFT JOIN enrollments e ON s.id = e.student_id
@@ -53,7 +56,11 @@ $students = $db->query("
             <div class="brand">COLLEGE ADMIN</div>
             <nav class="nav-links">
                 <a class="nav-item active" href="dashboard.php">Dashboard</a>
+<<<<<<< HEAD
                 <a class="nav-item" href="Students.php">Students</a>
+=======
+                <a class="nav-item" href="Student.php">Students</a>
+>>>>>>> 8bb8be0f6af6784b9a17839a449f0ab1a90ef57b
                 <a class="nav-item" href="Courses.php">Courses</a>
                 <a class="nav-item" href="Enrolments.php">Enrolment</a>
                 <a class="nav-item" href="Grades.php">Grades</a>
@@ -112,7 +119,10 @@ $students = $db->query("
                                 <tr>
                                     <th>Student No</th>
                                     <th>Name</th>
+<<<<<<< HEAD
                                     <th>Programme</th>
+=======
+>>>>>>> 8bb8be0f6af6784b9a17839a449f0ab1a90ef57b
                                     <th>Enrolled Courses</th>
                                 </tr>
                             </thead>
@@ -122,14 +132,21 @@ $students = $db->query("
                                         <tr>
                                             <td><?php echo htmlspecialchars($student['student_number'] ?? ''); ?></td>
                                             <td><?php echo htmlspecialchars($student['student_name'] ?? ''); ?></td>
+<<<<<<< HEAD
                                             <td><?php echo htmlspecialchars($student['programme'] ?? 'Not provided', ENT_QUOTES, 'UTF-8') ?></td>
+=======
+>>>>>>> 8bb8be0f6af6784b9a17839a449f0ab1a90ef57b
                                             <td><?php echo htmlspecialchars($student['course_names'] ?? 'N/A'); ?></td>
                                         </tr>
                                  <?php endforeach; ?>
     
                                 <?php else: ?>
                                     <tr>
+<<<<<<< HEAD
                                         <td colspan="4">No recent students found.</td>
+=======
+                                        <td colspan="3">No recent students found.</td>
+>>>>>>> 8bb8be0f6af6784b9a17839a449f0ab1a90ef57b
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
