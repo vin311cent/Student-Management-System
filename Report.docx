@@ -1,0 +1,55 @@
+<?php
+session_start();
+if (!isset($_SESSION['user'])) { header('Location: Login.php'); exit; }
+
+require_once __DIR__ . '/src/Database.php';
+$database = Database::getInstance();
+$db = $database->getConnection();
+
+$totalStudents = $db->query("SELECT COUNT(*) FROM students")->fetchColumn();
+$totalCourses = $db->query("SELECT COUNT(*) FROM courses")->fetchColumn();
+$totalEnrollments = $db->query("SELECT COUNT(*) FROM enrollments")->fetchColumn();
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reports | Student Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="admin-shell">
+        <aside class="sidebar">
+            <div class="brand">COLLEGE ADMIN</div>
+            <nav class="nav-links">
+                <a class="nav-item" href="dashboard.php">Dashboard</a>
+                <a class="nav-item" href="Student.php">Students</a>
+                <a class="nav-item" href="Courses.php">Courses</a>
+                <a class="nav-item" href="Enrolment.php">Enrolment</a>
+                <a class="nav-item" href="Grades.php">Grades</a>
+                <a class="nav-item" href="AcademicSummary.php">Academic Summary</a>
+                <a class="nav-item active" href="Reports.php">Reports</a>
+                <a class="nav-item" href="Settings.php">Settings</a>
+            </nav>
+        </aside>
+
+        <main class="main-panel">
+            <h2>System Reports</h2>
+            <div style="display:flex; gap: 20px;">
+                <div style="background:#f4f4f4; padding:20px; border-radius:5px;">
+                    <h3>Total Students</h3>
+                    <p><?= $totalStudents ?></p>
+                </div>
+                <div style="background:#f4f4f4; padding:20px; border-radius:5px;">
+                    <h3>Total Courses</h3>
+                    <p><?= $totalCourses ?></p>
+                </div>
+                <div style="background:#f4f4f4; padding:20px; border-radius:5px;">
+                    <h3>Active Enrollments</h3>
+                    <p><?= $totalEnrollments ?></p>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
