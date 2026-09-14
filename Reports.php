@@ -7,7 +7,7 @@ if (!isset($_SESSION['user'])) {
 }
 
 require_once __DIR__ . '/src/Database.php';
-require_once __DIR__ . '/src/Grades.php';
+require_once __DIR__ . '/src/Grade.php';
 
 $database = Database::getInstance();
 $db = $database->getConnection();

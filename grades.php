@@ -8,7 +8,7 @@ if (!isset($_SESSION['user'])) {
 }
 
 require_once __DIR__ . '/src/Database.php';
-require_once __DIR__ . '/src/Grades.php';
+require_once __DIR__ . '/src/Grade.php';
 
 $database = Database::getInstance();
 $db = $database->getConnection();
@@ -178,7 +178,7 @@ $enrollments = $db->query("
                                     <th>STUDENT</th>
                                     <th>COURSE</th>
                                     <th>CURRENT GRADE</th>
-                                    <th>ASSIGN GRADE</th>
+                                    <th>ASSIGN MARK</th>
                                 </tr>
                             </thead>
 
@@ -227,10 +227,12 @@ $enrollments = $db->query("
                                             >
 
                                             <input
-                                                type="text"
-                                                name="grade"
-                                                placeholder="e.g. A"
-                                                maxlength="2"
+                                                type="number"
+                                                name="marks"
+                                                min="0"
+                                                max="100"
+                                                step="0.01"
+                                                placeholder="e.g. 75"
                                                 required
                                             >
 
