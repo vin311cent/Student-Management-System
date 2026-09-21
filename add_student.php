@@ -114,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="number" name="year_of_study" value="1" min="1" max="6" required>
 
             <button type="submit">Save Student to System</button>
-            <a href="Student.php" class="cancel-lnk">Cancel and Go Back</a>
+            <a href="Students.php" class="cancel-lnk">Cancel and Go Back</a>
         </form>
     </div>
 

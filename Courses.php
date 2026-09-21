@@ -62,18 +62,19 @@ $courses = $db->query("SELECT * FROM courses ORDER BY course_code")->fetchAll(PD
             </nav>
         </aside>
 
-          <main class="main-panel">
-            <header class="topbar">
-                <div>
-                 <p class="eyebrow">Administrator access</p>
-                <h1>Courses</h1>
-               </div>
+        <main class="main-panel">
 
-                <div class="topbar-actions">
-                 <span class="topbar-pill">Admin ▼</span>
-                 <a class="logout-link" href="Login.php?logout=1">Logout</a>
-                </div>
-           </header>
+    <header class="topbar">
+        <div>
+            <p class="eyebrow">Administrator access</p>
+            <h1>Courses</h1>
+        </div>
+
+        <div class="topbar-actions">
+            <span class="topbar-pill">Admin ▼</span>
+            <a class="logout-link" href="Login.php?logout=1">Logout</a>
+        </div>
+    </header>
 
     <section class="dashboard-content">
 
