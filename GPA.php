@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/src/Grade.php';
+
 
 class GPA
 {

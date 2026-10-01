@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 
@@ -7,27 +6,16 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 
-require_once __DIR__ . '/src/Database.php';
+require_once __DIR__ . '/src/autoload.php';
 
 $database = Database::getInstance();
 $db = $database->getConnection();
 
 /*
 |--------------------------------------------------------------------------
-| Academic Summary + GPA
-|--------------------------------------------------------------------------
-|
-| GPA is calculated using:
-|
+| Academic Summary + weighted GPA
 | GPA = Sum(Grade Point × Credit Hours) / Sum(Credit Hours)
-|
-| Grade points:
-| A = 4.0
-| B = 3.0
-| C = 2.0
-| D = 1.0
-| F = 0.0
-|
+| Scale: A=4.0, B+=3.5, B=3.0, C+=2.5, C=2.0, D=1.0, F=0.0
 |--------------------------------------------------------------------------
 */
 
@@ -36,73 +24,70 @@ $summaries = $db->query("
     s.id,
     s.student_number AS student_no,
     CONCAT(s.first_name, ' ', s.last_name) AS name,
+    s.programme,
     COUNT(e.id) AS total_courses,
-    SUM(CASE WHEN e.grade IS NOT NULL THEN 1 ELSE 0 END) AS graded_courses
+    SUM(CASE WHEN e.grade IS NOT NULL OR e.marks IS NOT NULL THEN 1 ELSE 0 END) AS graded_courses
   FROM students s
   LEFT JOIN enrollments e ON s.id = e.student_id
-  GROUP BY s.id
+  GROUP BY s.id, s.student_number, s.first_name, s.last_name, s.programme
+  ORDER BY s.student_number
 ")->fetchAll(PDO::FETCH_ASSOC);
 
-
-/*
-|--------------------------------------------------------------------------
-| Calculate GPA for each student
-|--------------------------------------------------------------------------
-*/
+$columns = $db->query('SHOW COLUMNS FROM enrollments')->fetchAll(PDO::FETCH_COLUMN);
+$hasMarks = in_array('marks', $columns, true);
 
 foreach ($summaries as &$sum) {
+    $markSelect = $hasMarks ? 'e.marks' : 'NULL';
+    $stmt = $db->prepare("
+        SELECT c.course_code, c.course_name, c.credit_hours, {$markSelect} AS mark, e.grade AS letter_grade
+        FROM enrollments e
+        JOIN courses c ON e.course_id = c.id
+        WHERE e.student_id = ?
+    ");
+    $stmt->execute([$sum['id']]);
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $creditHours = (float)($sum['total_credit_hours'] ?? 0);
-    $qualityPoints = (float)($sum['total_quality_points'] ?? 0);
-
-    if ($creditHours > 0) {
-        $sum['gpa'] = round(
-            $qualityPoints / $creditHours,
-            2
-        );
-    } else {
-        $sum['gpa'] = null;
+    $student = new Student($sum['name'], $sum['programme'] ?? 'N/A', 1);
+    foreach ($rows as $row) {
+        $course = new Course($row['course_code'], $row['course_name'], (int)$row['credit_hours']);
+        $student->enrol($course);
+        if ($row['mark'] !== null && $row['mark'] !== '') {
+            $student->recordMark($row['course_code'], (float)$row['mark']);
+        }
     }
+    $sum['gpa'] = $student->calculateGpa();
 }
-
 unset($sum);
 
+$username = $_SESSION['user']['username'] ?? 'Administrator';
 ?>
 <!DOCTYPE html>
-
 <html lang="en">
-
-
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Academic Summary | Student Management System</title>
     <link rel="stylesheet" href="style.css">
-
     <style>
-
-        .gpa {
-            font-weight: bold;
-            font-size: 16px;
-        }
-
-        .no-gpa {
-            color: #777;
-        }
+    .gpa { 
+        font-weight: bold; 
+        font-size: 16px; 
+    }
+    .no-gpa { 
+        color: #777; 
+    }
+    .text-link{
+        color:#2563eb;
+        text-decoration:none;
+        font-weight:700
+    }
 
     </style>
-
 </head>
-
-
 <body>
-
     <div class="admin-shell">
-
         <aside class="sidebar">
             <div class="brand">COLLEGE ADMIN</div>
-
             <nav class="nav-links">
                 <a class="nav-item" href="dashboard.php">Dashboard</a>
                 <a class="nav-item" href="Student.php">Students</a>
@@ -115,118 +100,70 @@ unset($sum);
             </nav>
         </aside>
 
-
         <main class="main-panel">
-
-            <!-- Topbar -->
             <header class="topbar">
-
                 <div>
                     <p class="eyebrow">Administrator access</p>
                     <h1>Academic Summary</h1>
                 </div>
-
                 <div class="topbar-actions">
-                    <span class="topbar-pill">Admin ▼</span>
+                    <span class="topbar-pill">Admin</span>
                     <a class="logout-link" href="Login.php?logout=1">Logout</a>
                 </div>
-
             </header>
 
-
             <section class="dashboard-content">
-
-                <!-- Introduction -->
-                <section class="welcome-card">
-
+                <div class="welcome-card">
                     <div>
-                        <p class="eyebrow">Academic overview</p>
-
-                        <h2>Student Academic Summary</h2>
-
-                        <p>
-                            View enrolment and grading progress for each student.
-                        </p>
+                        <h2>Student academic progress</h2>
+                        <p>Weighted GPA uses credit hours and the A / B+ / B / C+ / C / D / F scale.</p>
                     </div>
+                </div>
 
-                </section>
-
-
-                <!-- Summary Table -->
                 <section class="panel-card">
-
-                    <div class="panel-heading">
-
-                        <div>
-                            <h3>Academic Records</h3>
-
-                            <p>
-                                Overview of enrolled and graded courses.
-                            </p>
-                        </div>
-
-                    </div>
-
-
                     <div class="table-wrap">
-
-                        <table class="summary-table">
-
+                        <table>
                             <thead>
                                 <tr>
-                                    <th>STUDENT</th>
-                                    <th>NAME</th>
-                                    <th>ENROLLED COURSES</th>
-                                    <th>GRADED COURSES</th>
+                                    <th>Student No</th>
+                                    <th>Name</th>
+                                    <th>Programme</th>
+                                    <th>Enrolled</th>
+                                    <th>Graded</th>
+                                    <th>GPA</th>
+                                    <th>Transcript</th>
                                 </tr>
                             </thead>
-
-
                             <tbody>
-
-                                <?php foreach ($summaries as $sum): ?>
-
-                                <tr>
-
-                                    <td>
-                                        <?= htmlspecialchars($sum['student_no'] ?? '') ?>
-                                    </td>
-
-                                    <td>
-                                        <?= htmlspecialchars($sum['name'] ?? '') ?>
-                                    </td>
-
-                                    <td>
-                                        <span class="summary-number">
-                                            <?= htmlspecialchars($sum['total_courses']) ?>
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <span class="summary-number">
-                                            <?= htmlspecialchars($sum['graded_courses']) ?>
-                                        </span>
-                                    </td>
-
-                                </tr>
-
-                                <?php endforeach; ?>
-
+                                <?php if (!empty($summaries)): ?>
+                                    <?php foreach ($summaries as $sum): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($sum['student_no'] ?? '') ?></td>
+                                            <td><?= htmlspecialchars($sum['name'] ?? '') ?></td>
+                                            <td><?= htmlspecialchars($sum['programme'] ?? 'N/A') ?></td>
+                                            <td><?= (int)($sum['total_courses'] ?? 0) ?></td>
+                                            <td><?= (int)($sum['graded_courses'] ?? 0) ?></td>
+                                            <td>
+                                                <?php if ($sum['gpa'] !== null): ?>
+                                                    <span class="gpa"><?= number_format($sum['gpa'], 2) ?></span>
+                                                <?php else: ?>
+                                                    <span class="no-gpa">N/A</span>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td>
+                                                <a class="text-link" href="Transcript.php?id=<?= urlencode((string)$sum['id']) ?>">View</a>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr><td colspan="7">No students found.</td></tr>
+                                <?php endif; ?>
                             </tbody>
-
                         </table>
-
                     </div>
-
                 </section>
-
             </section>
-
         </main>
-
     </div>
-
 </body>
-
 </html>
-

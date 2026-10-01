@@ -2,16 +2,29 @@
 session_start();
 if (!isset($_SESSION['user'])) { header('Location: Login.php'); exit; }
 
-require_once __DIR__ . '/src/Database.php';
+require_once __DIR__ . '/src/autoload.php';
 $database = Database::getInstance();
 $db = $database->getConnection();
 
+$enroll_message = '';
+$enroll_error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enroll'])) {
     $student_id = $_POST['student_id'] ?? null;
     $course_id = $_POST['course_id'] ?? null;
     if ($student_id && $course_id) {
-        $stmt = $db->prepare("INSERT INTO enrollments (student_id, course_id, enrolled_at) VALUES (?, ?, NOW())");
-        $stmt->execute([$student_id, $course_id]);
+        try {
+            $stmt = $db->prepare("INSERT INTO enrollments (student_id, course_id, enrolled_at) VALUES (?, ?, NOW())");
+            $stmt->execute([$student_id, $course_id]);
+            $enroll_message = 'Student enrolled successfully.';
+        } catch (PDOException $e) {
+            if ($e->getCode() == '23000') {
+                $enroll_error = 'This student is already enrolled in that course.';
+            } else {
+                $enroll_error = 'Could not save enrolment.';
+            }
+        }
+    } else {
+        $enroll_error = 'Please select both a student and a course.';
     }
 }
 

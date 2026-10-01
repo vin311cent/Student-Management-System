@@ -11,7 +11,7 @@ if (($_SESSION['user']['role'] ?? '') !== 'administrator') {
     exit;
 }
 
-require_once __DIR__ . '/src/Database.php';
+require_once __DIR__ . '/src/autoload.php';
 
 $message = $_SESSION['flash_message'] ?? 'You are logged in successfully.';
 unset($_SESSION['flash_message']);

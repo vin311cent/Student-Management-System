@@ -1,68 +1,91 @@
 <?php
-
+/**
+ * Grade class
+ * Represents a letter grade derived from a numeric mark (0–100).
+ * Responsible for the college grading scale used by Enrolment.
+ */
 class Grade
 {
-    /**
-     * Convert marks into a letter grade.
-     *
-     * @param float $marks
-     * @return string
-     * @throws InvalidArgumentException
-     */
-    public static function convert($marks)
+    private float $mark;
+    private string $letter;
+
+    public function __construct(float $mark)
     {
-        if (!is_numeric($marks)) {
-            throw new InvalidArgumentException(
-                "Marks must be a number."
-            );
-        }
+        $this->setMark($mark);
+    }
 
-        $marks = (float)$marks;
+    public function getMark(): float
+    {
+        return $this->mark;
+    }
 
-        if ($marks < 0 || $marks > 100) {
-            throw new InvalidArgumentException(
-                "Marks must be between 0 and 100."
-            );
-        }
+    public function getLetter(): string
+    {
+        return $this->letter;
+    }
 
-        if ($marks >= 80) {
-            return 'A';
-        } elseif ($marks >= 70) {
-            return 'B';
-        } elseif ($marks >= 60) {
-            return 'C';
-        } elseif ($marks >= 50) {
-            return 'D';
-        } else {
-            return 'F';
+    public function setMark(float $mark): void
+    {
+        if ($mark < 0 || $mark > 100) {
+            throw new InvalidArgumentException('Mark must be between 0 and 100.');
         }
+        $this->mark = $mark;
+        $this->letter = self::convert($mark);
     }
 
     /**
-     * Convert a letter grade to a grade point.
-     *
-     * @param string $grade
-     * @return float
-     * @throws InvalidArgumentException
+     * Letter scale required by the assignment: A, B+, B, C+, C, D, F
      */
-    public static function gradePoint($grade)
+    public static function convert($mark): string
     {
-        $grade = strtoupper(trim($grade));
-
-        $points = [
-            'A' => 4.0,
-            'B' => 3.0,
-            'C' => 2.0,
-            'D' => 1.0,
-            'F' => 0.0
-        ];
-
-        if (!array_key_exists($grade, $points)) {
-            throw new InvalidArgumentException(
-                "Invalid grade: " . $grade
-            );
+        $mark = (float)$mark;
+        if ($mark < 0 || $mark > 100) {
+            throw new InvalidArgumentException('Mark must be between 0 and 100.');
         }
+        if ($mark >= 80) {
+            return 'A';
+        }
+        if ($mark >= 75) {
+            return 'B+';
+        }
+        if ($mark >= 70) {
+            return 'B';
+        }
+        if ($mark >= 65) {
+            return 'C+';
+        }
+        if ($mark >= 60) {
+            return 'C';
+        }
+        if ($mark >= 50) {
+            return 'D';
+        }
+        return 'F';
+    }
 
+    /**
+     * Grade point for a letter grade (used by GPA / reports).
+     */
+    public static function gradePoint($grade): float
+    {
+        $grade = strtoupper(trim((string)$grade));
+        $points = [
+            'A'  => 4.0,
+            'B+' => 3.5,
+            'B'  => 3.0,
+            'C+' => 2.5,
+            'C'  => 2.0,
+            'D'  => 1.0,
+            'F'  => 0.0,
+        ];
+        if (!array_key_exists($grade, $points)) {
+            throw new InvalidArgumentException('Invalid grade: ' . $grade);
+        }
         return $points[$grade];
+    }
+
+    public function __toString(): string
+    {
+        return $this->letter;
     }
 }

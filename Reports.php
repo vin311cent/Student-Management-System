@@ -6,8 +6,8 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 
-require_once __DIR__ . '/src/Database.php';
-require_once __DIR__ . '/src/Grade.php';
+require_once __DIR__ . '/src/autoload.php';
+
 
 $database = Database::getInstance();
 $db = $database->getConnection();
