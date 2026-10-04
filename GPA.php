@@ -1,64 +1,19 @@
 <?php
+declare(strict_types=1);
 
-require_once __DIR__ . '/src/Grade.php';
+require_once __DIR__ . '/app/bootstrap.php';
 
 class GPA
 {
-    /**
-     * Calculate weighted GPA.
-     *
-     * @param array $courses
-     * @return float
-     * @throws InvalidArgumentException
-     */
-    public static function calculate($courses)
+    public static function calculate(mixed $courses): float
     {
-        if (!is_array($courses) || empty($courses)) {
-            throw new InvalidArgumentException(
-                "At least one course is required to calculate GPA."
-            );
+        if (!is_array($courses)) {
+            throw new InvalidArgumentException('Courses must be supplied as an array.');
         }
-
-        $totalQualityPoints = 0;
-        $totalCreditHours = 0;
-
-        foreach ($courses as $course) {
-
-            if (!isset($course['grade'], $course['credit_hours'])) {
-                throw new InvalidArgumentException(
-                    "Each course must have a grade and credit hours."
-                );
-            }
-
-            $grade = strtoupper(trim($course['grade']));
-            $creditHours = $course['credit_hours'];
-
-            if (!is_numeric($creditHours) || $creditHours <= 0) {
-                throw new InvalidArgumentException(
-                    "Credit hours must be greater than zero."
-                );
-            }
-
-            $creditHours = (float)$creditHours;
-
-            $gradePoint = Grade::gradePoint($grade);
-
-            $qualityPoints = $gradePoint * $creditHours;
-
-            $totalQualityPoints += $qualityPoints;
-
-            $totalCreditHours += $creditHours;
+        $gpa = (new \App\Services\GradeService())->weightedGpa($courses);
+        if ($gpa === null) {
+            throw new InvalidArgumentException('At least one graded course with valid credit hours is required.');
         }
-
-        if ($totalCreditHours <= 0) {
-            throw new InvalidArgumentException(
-                "Total credit hours must be greater than zero."
-            );
-        }
-
-        return round(
-            $totalQualityPoints / $totalCreditHours,
-            2
-        );
+        return $gpa;
     }
 }

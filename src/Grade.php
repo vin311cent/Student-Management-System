@@ -1,68 +1,22 @@
 <?php
+declare(strict_types=1);
+
+require_once __DIR__ . '/../app/bootstrap.php';
 
 class Grade
 {
-    /**
-     * Convert marks into a letter grade.
-     *
-     * @param float $marks
-     * @return string
-     * @throws InvalidArgumentException
-     */
-    public static function convert($marks)
+    private static function service(): \App\Services\GradeService
     {
-        if (!is_numeric($marks)) {
-            throw new InvalidArgumentException(
-                "Marks must be a number."
-            );
-        }
-
-        $marks = (float)$marks;
-
-        if ($marks < 0 || $marks > 100) {
-            throw new InvalidArgumentException(
-                "Marks must be between 0 and 100."
-            );
-        }
-
-        if ($marks >= 80) {
-            return 'A';
-        } elseif ($marks >= 70) {
-            return 'B';
-        } elseif ($marks >= 60) {
-            return 'C';
-        } elseif ($marks >= 50) {
-            return 'D';
-        } else {
-            return 'F';
-        }
+        return new \App\Services\GradeService();
     }
 
-    /**
-     * Convert a letter grade to a grade point.
-     *
-     * @param string $grade
-     * @return float
-     * @throws InvalidArgumentException
-     */
-    public static function gradePoint($grade)
+    public static function convert(mixed $marks): string
     {
-        $grade = strtoupper(trim($grade));
+        return self::service()->fromMark($marks);
+    }
 
-        $points = [
-            'A' => 4.0,
-            'B' => 3.0,
-            'C' => 2.0,
-            'D' => 1.0,
-            'F' => 0.0
-        ];
-
-        if (!array_key_exists($grade, $points)) {
-            throw new InvalidArgumentException(
-                "Invalid grade: " . $grade
-            );
-        }
-
-        return $points[$grade];
+    public static function gradePoint(string $grade): float
+    {
+        return self::service()->points($grade);
     }
 }

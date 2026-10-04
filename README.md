@@ -26,12 +26,12 @@ The system currently provides the following functionality:
 
 ### Application Entry Point
 
-The application entry point now sends visitors directly to the login page:
+The application uses a single public front controller:
 
-* `index.php` redirects to `Login.php`
-* `index.html` also redirects to `Login.php`
+* `index.php?route=login` displays the login form.
+* Other pages are dispatched through `index.php?route=...` after authentication.
 
-This makes the homepage behave as a landing page for authentication instead of displaying a blank screen.
+This keeps routing, authentication, and request handling in one place.
 
 ### Admin Dashboard
 
@@ -145,7 +145,9 @@ The system uses exception handling to prevent invalid data from causing unexpect
 * Invalid credit hours
 * Empty course data when calculating GPA
 
-Database and unexpected application errors are also caught and handled gracefully.
+Controllers show validation and expected write errors to the user. Database
+connectivity and unexpected failures still require a configured database and
+should be monitored through the PHP/server error log.
 
 Example:
 
@@ -163,69 +165,26 @@ try {
 
 The `tests/` directory contains test cases for important system components.
 
-Testing covers:
+The lightweight domain/service checks run without a database:
+
+```powershell
+php tests/run.php
+```
+
+The checks cover:
 
 * Student class methods
 * Course class methods
 * Enrolment functionality
 * Grade conversion
 * Grade boundaries
-* Static counter functionality
-* GPA calculation
+* Weighted GPA calculation
 * Invalid input handling
 * Credit-hour validation
 
-### Grade Boundary Tests
-
-The grade conversion is tested using boundary values including:
-
-| Test Mark | Expected Grade |
-| --------: | :------------: |
-|         0 |        F       |
-|        49 |        F       |
-|        50 |        D       |
-|        59 |        D       |
-|        60 |        C       |
-|        69 |        C       |
-|        70 |        B       |
-|        79 |        B       |
-|        80 |        A       |
-|       100 |        A       |
-
-### Invalid Input Tests
-
-The system is also tested using invalid values such as:
-
-* `-1`
-* `101`
-* `"abc"`
-* Empty marks
-* Invalid grade letters
-* Zero or negative credit hours
-* Missing course information
-
-The expected behaviour is for the system to reject the invalid input and provide an appropriate error message.
-
----
-
-## Test Data
-
-`TestData.php` provides realistic data for testing the system.
-
-Test data includes:
-
-* Valid student records
-* Valid course records
-* Valid enrolment records
-* Valid marks
-* Boundary marks
-* Invalid marks
-* Invalid or empty input values
-* GPA test cases
-
-This allows the system to be tested under both normal and exceptional conditions.
-
----
+The tests cover grade boundaries, invalid marks, invalid domain values, and an
+example weighted GPA. Database integration and browser workflows still need to
+be tested against a configured local database.
 
 # Bug Report and Fix Documentation
 
@@ -243,7 +202,7 @@ The major issues included:
 | BUG-006 | GPA              | Invalid credit hours could affect calculation                | Fixed   |
 | BUG-007 | GPA              | Empty course records could cause invalid GPA calculations    | Fixed   |
 | BUG-008 | Grades/Database  | Errors were not handled gracefully                           | Fixed   |
-| BUG-009 | Reports          | Report functionality requires further implementation/testing | Pending |
+| BUG-009 | Reports          | Report page implemented; database integration testing remains | Testing |
 
 Detailed information about these issues, their causes, fixes, and retesting results is documented in:
 
@@ -251,40 +210,32 @@ Detailed information about these issues, their causes, fixes, and retesting resu
 
 ---
 
-# Project Structure
+# Object-Oriented Architecture
 
-A simplified project structure is shown below:
+The application uses a lightweight MVC and layered design. `index.php` is the
+single public front controller; route values select controllers, which use
+repositories and services before rendering a view.
+
+Examples: `index.php?route=login`, `index.php?route=dashboard`, and
+`index.php?route=academic-summary`. Do not link directly to controller or view
+files.
 
 ```text
-Student-Management-System/
-│
-├── index.php
-├── index.html
-├── Login.php
-├── dashboard.php
-├── Student.php
-├── Courses.php
-├── Enrolment.php
-├── Grades.php
-├── AcademicSummary.php
-├── Reports.php
-├── Settings.php
-│
-├── src/
-│   ├── Database.php
-│   ├── Grade.php
-│   └── ...
-│
-├── tests/
-│   ├── ...
-│   └── ...
-│
-├── TestData.php
-├── GPA.php
-├── style.css
-│
-└── README.md
+app/
+├── Application.php
+├── bootstrap.php
+├── Controllers/       # HTTP request handling and validation
+├── Core/              # Database, router, base controller, and view renderer
+├── Domain/            # Student, Course, and Enrollment entities
+├── Repositories/      # SQL persistence and read queries
+└── Services/          # Authentication and grading rules
+views/                 # PHP templates and shared layout
+tests/                 # Dependency-free domain/service checks
 ```
+
+Controllers depend on repositories and services rather than executing SQL
+directly. Domain objects enforce invariants, and the templates render data
+without accessing the database.
 
 ---
 
@@ -316,21 +267,27 @@ Courses should also contain a `credit_hours` field for GPA calculations.
 2. Start the Apache and MySQL services.
 3. Copy the project into the web server directory.
 4. Create/import the project database.
-5. Configure the database connection in:
+5. Configure the database connection using environment variables:
 
 ```text
-src/Database.php
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_NAME=students_records
+DB_USER=root
+DB_PASS=
 ```
 
+Set `ADMIN_USERNAME` and `ADMIN_PASSWORD` in the environment to override the
+demo login without changing source code.
+
 6. Open the application through the local PHP server.
-7. The application will redirect to `Login.php`.
-8. Sign in using the administrator credentials.
+7. Sign in using the administrator credentials.
 
 ---
 
 # Demo Access
 
-Use the following credentials to sign in:
+Unless overridden using environment variables, use:
 
 * **Username:** `admin`
 * **Password:** `admin123`
@@ -388,11 +345,9 @@ Responsibilities include:
 
 Key deliverables:
 
-* `tests/`
-* `TestData.php`
+* `tests/run.php`
 * `GPA.php`
 * Bug Report and Fix Documentation
-* Test cases and testing evidence
 
 ---
 
