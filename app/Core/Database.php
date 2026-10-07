@@ -5,49 +5,42 @@ namespace App\Core;
 
 use PDO;
 use PDOException;
+use RuntimeException;
 
+/** Singleton wrapper that owns the single PDO connection (Model layer infrastructure). */
 final class Database
 {
-    private static ?self $instance = null;
-    private PDO $connection;
+    private static ?PDO $connection = null;
 
-    private function __construct()
+    private function __construct() {}
+    private function __clone() {}
+
+    public static function connection(): PDO
     {
-        $host = getenv('DB_HOST') ?: '127.0.0.1';
-        $port = getenv('DB_PORT') ?: '3306';
-        $database = getenv('DB_NAME') ?: 'students_records';
-        $username = getenv('DB_USER') ?: 'root';
-        $password = getenv('DB_PASS') ?: '';
-        $dsn = sprintf('mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4', $host, $port, $database);
-
-        try {
-            $this->connection = new PDO($dsn, $username, $password, [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        if (self::$connection === null) {
+            $options = [
+                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES => false,
-            ]);
-        } catch (PDOException $exception) {
-            error_log('Database connection failed: ' . $exception->getMessage());
-            throw $exception;
+                PDO::ATTR_EMULATE_PREPARES   => false,
+            ];
+            try {
+                if (Config::get('db.driver') === 'sqlite') {
+                    self::$connection = new PDO('sqlite:' . Config::get('db.path'), null, null, $options);
+                    self::$connection->exec('PRAGMA foreign_keys = ON');
+                } else {
+                    $dsn = sprintf(
+                        'mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4',
+                        Config::get('db.host'),
+                        Config::get('db.port'),
+                        Config::get('db.name')
+                    );
+                    self::$connection = new PDO($dsn, Config::get('db.user'), Config::get('db.pass'), $options);
+                }
+            } catch (PDOException $e) {
+                error_log('Database connection failed: ' . $e->getMessage());
+                throw new RuntimeException('Could not connect to the database. Check config/config.php and that MySQL is running.');
+            }
         }
-    }
-
-    public static function getInstance(): self
-    {
-        return self::$instance ??= new self();
-    }
-
-    public function connection(): PDO
-    {
-        return $this->connection;
-    }
-
-    private function __clone()
-    {
-    }
-
-    public function __wakeup(): void
-    {
-        throw new \LogicException('The database service cannot be unserialized.');
+        return self::$connection;
     }
 }

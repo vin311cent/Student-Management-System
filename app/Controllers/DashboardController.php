@@ -3,27 +3,30 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Core\Auth;
 use App\Core\Controller;
-use App\Repositories\EnrollmentRepository;
+use App\Core\Database;
+use App\Repositories\CourseRepository;
+use App\Repositories\EnrolmentRepository;
 use App\Repositories\StudentRepository;
-use DateTimeImmutable;
-use DateTimeZone;
 
+/** Overview page: totals and the most recently registered students. */
 final class DashboardController extends Controller
 {
-    public function __construct(\App\Core\View $view, private EnrollmentRepository $enrollments, private StudentRepository $students)
-    {
-        parent::__construct($view);
-    }
-
     public function index(): void
     {
-        $this->requireAuthentication(true);
-        $this->render('dashboard', [
-            'counts' => $this->enrollments->counts(),
-            'students' => $this->students->recent(),
-            'username' => $_SESSION['user']['username'] ?? 'Administrator',
-            'dateLabel' => (new DateTimeImmutable('now', new DateTimeZone('Africa/Lusaka')))->format('l, F j, Y'),
+        $db = Database::connection();
+        $students = new StudentRepository($db);
+
+        $this->view('dashboard/index', [
+            'title'         => 'Dashboard',
+            'active'        => 'dashboard',
+            'username'      => Auth::username(),
+            'dateLabel'     => date('l, F j, Y'),
+            'totalStudents' => $students->count(),
+            'totalCourses'  => (new CourseRepository($db))->count(),
+            'totalEnrol'    => (new EnrolmentRepository($db))->count(),
+            'recent'        => $students->recent(5),
         ]);
     }
 }

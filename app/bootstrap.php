@@ -1,21 +1,18 @@
 <?php
 declare(strict_types=1);
 
-use App\Application;
-
+/**
+ * Bootstrap: PSR-4 style autoloader (App\Foo\Bar => app/Foo/Bar.php) + helpers.
+ */
 spl_autoload_register(static function (string $class): void {
     $prefix = 'App\\';
-    if (!str_starts_with($class, $prefix)) {
+    if (strncmp($class, $prefix, strlen($prefix)) !== 0) {
         return;
     }
-    $path = __DIR__ . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, substr($class, strlen($prefix))) . '.php';
-    if (is_file($path)) {
-        require $path;
+    $file = __DIR__ . '/' . str_replace('\\', '/', substr($class, strlen($prefix))) . '.php';
+    if (is_file($file)) {
+        require_once $file;
     }
 });
 
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    session_start();
-}
-
-return new Application(dirname(__DIR__));
+require_once __DIR__ . '/helpers.php';

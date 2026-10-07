@@ -3,36 +3,38 @@ declare(strict_types=1);
 
 namespace App\Core;
 
+/** Base controller: shared helpers for rendering, redirecting, flashing and CSRF checks. */
 abstract class Controller
 {
-    public function __construct(protected View $view)
+    public function __construct(protected Request $request)
     {
-    }
-
-    protected function render(string $template, array $data = []): void
-    {
-        $flash = $_SESSION['flash_message'] ?? null;
-        unset($_SESSION['flash_message']);
-        $this->view->render($template, ['flash' => $flash] + $data);
-    }
-
-    protected function redirect(string $page): never
-    {
-        header('Location: index.php?route=' . rawurlencode($page));
-        exit;
-    }
-
-    protected function requireAuthentication(bool $administratorOnly = false): void
-    {
-        $user = $_SESSION['user'] ?? null;
-        if (!is_array($user) || ($administratorOnly && ($user['role'] ?? '') !== 'administrator')) {
-            $this->redirect('login');
+        if ($request->method() === 'POST') {
+            $this->verifyCsrf();
         }
     }
 
-    protected function postString(string $key): string
+    /** @param array<string,mixed> $data */
+    protected function view(string $view, array $data = [], ?string $layout = 'main'): void
     {
-        $value = $_POST[$key] ?? '';
-        return is_string($value) ? trim($value) : '';
+        View::render($view, $data + ['flash' => Session::pullFlash()], $layout);
+    }
+
+    protected function redirect(string $path): never
+    {
+        header('Location: ' . url($path));
+        exit;
+    }
+
+    protected function flash(string $type, string $message): void
+    {
+        Session::flash($type, $message);
+    }
+
+    private function verifyCsrf(): void
+    {
+        if (!Session::validCsrf($_POST['_token'] ?? null)) {
+            http_response_code(419);
+            exit('Your session expired. Go back, refresh the page and try again.');
+        }
     }
 }
