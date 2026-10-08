@@ -74,6 +74,7 @@
             </tbody>
         </table>
     </div>
+    <hr>
     <div class="table-wrap" style="border-top:1px solid #e2e8f0;">
         <table>
             <thead><tr><th>Course Code</th><th>Course Name</th><th>Enrolled</th><th>Graded</th><th>Pending</th><th>Average</th></tr></thead>
@@ -90,6 +91,7 @@
             </tbody>
         </table>
     </div>
+    <hr>
 </section>
 
 <section class="panel-card section-spacer" id="performance">
