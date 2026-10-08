@@ -1,7 +1,7 @@
 <?php
 /**
- * @var \App\Models\Student[] $students
- * @var \App\Models\Course[] $courses
+ * @var \App\classes\Student[] $students
+ * @var \App\classes\Course[] $courses
  */
 ?>
 <section class="welcome-card">

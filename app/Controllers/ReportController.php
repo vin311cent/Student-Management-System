@@ -6,7 +6,7 @@ namespace App\Controllers;
 use App\Core\Controller;
 use App\Core\Database;
 use App\Core\Request;
-use App\Models\Student;
+use App\classes\Student;
 use App\Repositories\CourseRepository;
 use App\Repositories\StudentRepository;
 use App\Services\ReportService;

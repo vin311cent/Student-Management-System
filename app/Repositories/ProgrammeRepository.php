@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
-use App\Models\Programme;
+use App\classes\Programme;
 use InvalidArgumentException;
 use PDO;
 use PDOException;

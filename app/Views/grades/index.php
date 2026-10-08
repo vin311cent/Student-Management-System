@@ -1,4 +1,4 @@
-<?php /** @var \App\Models\Student[] $students (only students with enrolments) */ ?>
+<?php /** @var \App\classes\Student[] $students (only students with enrolments) */ ?>
 <div class="welcome-card">
     <div>
         <h2>Record &amp; manage marks</h2>

@@ -1,4 +1,4 @@
-<?php /** @var \App\Models\Programme[] $programmes */ ?>
+<?php /** @var \App\classes\Programme[] $programmes */ ?>
 <section class="panel-card" style="max-width:520px;">
     <div class="panel-heading"><h3>New student record</h3></div>
     <form method="post" action="<?= e(url('/students')) ?>">

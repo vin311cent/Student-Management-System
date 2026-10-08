@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \App\Models\Student $student
+ * @var \App\classes\Student $student
  * @var array $transcript
  * @var ?float $gpa
  */

@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \App\Models\Student[] $students
+ * @var \App\classes\Student[] $students
  * @var array<int, array{0:string,1:string}> $log
  * @var int $counter
  */

@@ -1,7 +1,7 @@
 <?php
 /**
  * @var string $username
- * @var \App\Models\Programme[] $programmes
+ * @var \App\classes\Programme[] $programmes
  */
 ?>
 <section class="welcome-card">

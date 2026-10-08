@@ -1,7 +1,7 @@
 <?php
 /**
- * @var \App\Models\Student $student
- * @var \App\Models\Programme[] $programmes
+ * @var \App\classes\Student $student
+ * @var \App\classes\Programme[] $programmes
  */
 $names = array_map(static fn ($p) => $p->getName(), $programmes);
 if (!in_array($student->getProgramme(), $names, true)) {

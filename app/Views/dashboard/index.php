@@ -5,7 +5,7 @@
  * @var int $totalStudents
  * @var int $totalCourses
  * @var int $totalEnrol
- * @var \App\Models\Student[] $recent
+ * @var \App\classes\Student[] $recent
  */
 ?>
 <section class="welcome-card">

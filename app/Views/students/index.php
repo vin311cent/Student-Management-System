@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \App\Models\Student[] $students
+ * @var \App\classes\Student[] $students
  * @var string $query
  */
 ?>

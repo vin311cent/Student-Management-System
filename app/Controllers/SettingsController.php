@@ -7,7 +7,7 @@ use App\Core\Auth;
 use App\Core\Controller;
 use App\Core\Database;
 use App\Core\Request;
-use App\Models\Programme;
+use App\classes\Programme;
 use App\Repositories\ProgrammeRepository;
 use InvalidArgumentException;
 

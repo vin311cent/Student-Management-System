@@ -1,4 +1,4 @@
-<?php /** @var \App\Models\Student[] $students */ ?>
+<?php /** @var \App\classes\Student[] $students */ ?>
 <div class="welcome-card">
     <div>
         <h2>Student academic progress</h2>

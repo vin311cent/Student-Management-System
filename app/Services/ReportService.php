@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Models\Course;
-use App\Models\Student;
+use App\classes\Course;
+use App\classes\Student;
 
 /** Builds report figures from domain objects (no SQL, no HTML). */
 final class ReportService

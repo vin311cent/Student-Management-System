@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Models;
+namespace App\classes;
 
 /**
  * Enrolment: links a Student to a Course and stores the mark.

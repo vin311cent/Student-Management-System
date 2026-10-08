@@ -6,7 +6,7 @@ namespace App\Controllers;
 use App\Core\Controller;
 use App\Core\Database;
 use App\Core\Request;
-use App\Models\Course;
+use App\classes\Course;
 use App\Repositories\CourseRepository;
 use App\Repositories\ProgrammeRepository;
 use InvalidArgumentException;
