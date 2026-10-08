@@ -12,7 +12,6 @@ return static function (Router $r): void {
     $r->get('/login',       'AuthController@showLogin', false);
     $r->post('/login',      'AuthController@login',     false);
     $r->get('/logout',      'AuthController@logout',    false);
-    $r->get('/demo',        'DemoController@index',     false); // in-memory OOP demonstration
 
     // Administrator area
     $r->get('/dashboard',   'DashboardController@index');

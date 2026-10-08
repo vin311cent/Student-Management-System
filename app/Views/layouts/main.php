@@ -21,14 +21,14 @@ $nav = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= e($title ?? 'EduManage') ?> | Student Management System</title>
+    <title><?= e($title ?? 'LGU Manage') ?> | Student Management System</title>
     <link rel="stylesheet" href="<?= e(asset('style.css')) ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 <div class="admin-shell">
     <aside class="sidebar">
-        <div class="brand">EduManage</div>
+        <div class="brand">LGU Manage</div>
         <nav class="nav-links" aria-label="Sidebar navigation">
             <?php foreach ($nav as $key => [$path, $icon, $label]): ?>
                 <a class="nav-item<?= $active === $key ? ' active' : '' ?>" href="<?= e(url($path)) ?>">

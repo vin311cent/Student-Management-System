@@ -1,7 +1,7 @@
 <?php $flash = $flash ?? []; ?>
 <div class="page-shell">
     <div class="login-card">
-        <h1>EduManage | Student Management System</h1>
+        <h1>LGU Manage | Student Management System</h1>
         <p class="subtitle">Sign in to continue</p>
         <p class="hint">Demo login: admin / admin123</p>
 
@@ -25,7 +25,5 @@
 
             <button type="submit">Log In</button>
         </form>
-
-        <p class="footnote"><a href="<?= e(url('/demo')) ?>">View OOP demonstration</a></p>
     </div>
 </div>

@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 return [
     'app' => [
-        'name'     => 'EduManage',
+        'name'     => 'LGU Manage',
         'timezone' => 'Africa/Lusaka',
         'debug'    => false, // set true while developing to see exception details
     ],

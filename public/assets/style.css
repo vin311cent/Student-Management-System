@@ -1,5 +1,5 @@
 /* ============================================================
-   EduManage-style theme for PHP Student Management System
+   LGU Manage-style theme for PHP Student Management System
    Modern admin dashboard look – preserves all existing classes
    ============================================================ */
 
@@ -902,3 +902,65 @@ textarea:focus {
 }
 .text-link { color: #2563eb; text-decoration: none; font-weight: 700; }
 .inline-form { display: flex; gap: 8px; margin-bottom: 1rem; }
+
+/* ---- Reports page (cards, summary, print) ---- */
+.reports-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 18px;
+    margin-bottom: 8px;
+}
+.report-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 26px 22px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    text-align: center;
+    border: 1px solid #e2e8f0;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.report-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+.report-card i {
+    font-size: 2rem;
+    color: #4f46e5;
+    margin-bottom: 12px;
+}
+.report-card h3 {
+    margin: 0 0 8px;
+    font-size: 1.05rem;
+}
+.report-card p {
+    margin: 0 0 16px;
+    color: #64748b;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+.report-card .btn {
+    width: 100%;
+    justify-content: center;
+}
+.report-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.report-summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+.report-table { min-width: 700px; }
+.print-only { display: none; }
+.section-spacer { margin-top: 8px; }
+@media print {
+    .sidebar, .topbar-actions, .report-actions, .reports-grid, .no-print { display: none !important; }
+    .admin-shell, .main-panel { display: block; padding: 0; }
+    .panel-card, .welcome-card, .stat-card { box-shadow: none; }
+    .print-only { display: block; }
+}
+@media (max-width: 700px) {
+    .report-summary { grid-template-columns: 1fr; }
+}
