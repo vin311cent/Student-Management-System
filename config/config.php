@@ -12,8 +12,7 @@ return [
         'debug'    => false, // set true while developing to see exception details
     ],
     'db' => [
-        'driver' => getenv('DB_DRIVER') ?: 'mysql',            // 'mysql' (default) or 'sqlite' (tests / quick demo)
-        'path'   => getenv('DB_PATH') ?: __DIR__ . '/../database/app.sqlite',
+        'driver' => getenv('DB_DRIVER') ?: 'mysql',     
         'host' => getenv('DB_HOST') ?: '127.0.0.1',
         'port' => getenv('DB_PORT') ?: '3306',
         'name' => getenv('DB_NAME') ?: 'students_records',
