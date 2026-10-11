@@ -6,14 +6,10 @@ PHP 8+ / PDO / MySQL. Object-oriented, with a front controller, router, controll
 
 ```bash
 mysql -u root -p < database/database.sql      # creates DB students_records + sample data
-php -S localhost:8000 -t public               # then open http://localhost:8000
-```
+
 
 * Admin login: `admin` / `admin123` (stored as a bcrypt hash in `config/config.php`)
 * DB credentials: edit `config/config.php` or set `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASS`.
-* No MySQL handy? SQLite works too (needs `pdo_sqlite`):
-  `sqlite3 database/app.sqlite < database/schema.sqlite.sql` then
-  `DB_DRIVER=sqlite php -S localhost:8000 -t public`
 * XAMPP: put the folder in `htdocs` and open `/sms-mvc/public/` (`public/.htaccess` handles routing).
 
 ## Structure
@@ -36,7 +32,6 @@ app/
   Services/              ReportService (report figures from objects)
   Views/                 layouts/ (main, plain) + one folder per feature
 database/database.sql         MySQL schema + sample data
-database/schema.sqlite.sql    same schema for SQLite
 ```
 
 ## Request flow
