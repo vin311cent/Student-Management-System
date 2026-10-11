@@ -6,14 +6,14 @@ declare(strict_types=1);
  * Run with:  php -S localhost:8000 -t public
  */
 
-require_once __DIR__ . '/../app/bootstrap.php';
-
 use App\Core\Auth;
 use App\Core\Config;
 use App\Core\Request;
 use App\Core\Router;
 use App\Core\Session;
 use App\Core\View;
+
+require_once __DIR__ . '/../app/bootstrap.php';
 
 date_default_timezone_set((string) Config::get('app.timezone', 'UTC'));
 Session::start();
