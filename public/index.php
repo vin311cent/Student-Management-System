@@ -6,7 +6,6 @@ declare(strict_types=1);
  * Run with:  php -S localhost:8000 -t public
  */
 
-use App\Core\Auth;
 use App\Core\Config;
 use App\Core\Request;
 use App\Core\Router;
